@@ -21,9 +21,6 @@ jobs:
       with:
         java-version: 14
 
-    - name: Print Env variable
-      run: echo "Hello Darpan. Today is $DAY_OF_WEEK!"
-
     - name: Build project
       env:
         DAY_OF_WEEK: ${{ env.DAY_OF_WEEK }}
