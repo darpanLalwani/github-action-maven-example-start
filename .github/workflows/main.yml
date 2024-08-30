@@ -13,6 +13,8 @@ on:
       custom_message_1:
         description: "Custom message 1 to use in the build"
         required: false
+env:
+  DAY_OF_WEEK: Monday
 
 jobs:
   build_and_test:
@@ -26,16 +28,11 @@ jobs:
       with:
         java-version: 14
 
-    - name: Print Custom Message
-      run: echo "CUSTOM_MESSAGE is: ${{ github.event.inputs.custom_message }}"
-
-    - name: Print Custom Message 1
-      run: echo "CUSTOM_MESSAGE 1 is: ${{ github.event.inputs.custom_message_1 }}"
+    - name: Print Env variable
+      run: echo "Hello Darpan. Today is $DAY_OF_WEEK!"
 
     - name: Build project with Maven
       env:
         CUSTOM_MESSAGE: ${{ github.event.inputs.custom_message }}
-        CUSTOM_MESSAGE_1: ${{ github.event.inputs.custom_message_1 }}
+        CUSTOM_MESSAGE_1: ${{ github.event.inputs.custom_message_1 || 'default_value' }}  # Use a default value if not provided
       run: mvn -B package --file pom.xml
-
-
