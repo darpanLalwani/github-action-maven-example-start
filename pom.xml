@@ -23,7 +23,7 @@
       <executions>
         <execution>
           <id>print-env</id>
-          <phase>validate</phase> <!-- or another phase where you want to print the environment -->
+          <phase>validate</phase>
           <goals>
             <goal>java</goal>
           </goals>
