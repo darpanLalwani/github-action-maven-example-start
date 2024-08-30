@@ -5,14 +5,7 @@ on:
     branches: [ master ]
   pull_request:
     branches: [ master ]
-  workflow_dispatch:
-    inputs:
-      custom_message:
-        description: "Custom message to use in the build"
-        required: true
-      custom_message_1:
-        description: "Custom message 1 to use in the build"
-        required: false
+    
 env:
   DAY_OF_WEEK: Monday
 
@@ -32,7 +25,4 @@ jobs:
       run: echo "Hello Darpan. Today is $DAY_OF_WEEK!"
 
     - name: Build project with Maven
-      env:
-        CUSTOM_MESSAGE: ${{ github.event.inputs.custom_message }}
-        CUSTOM_MESSAGE_1: ${{ github.event.inputs.custom_message_1 || 'default_value' }}  # Use a default value if not provided
       run: mvn -B package --file pom.xml
