@@ -5,24 +5,26 @@ on:
     branches: [ master ]
   pull_request:
     branches: [ master ]
-
-env:
-  DAY_OF_WEEK: Monday
+  workflow_dispatch:
+    inputs:
+      day_of_week:
+        description: "The day of the week for the build"
+        required: true
+        default: "Monday"
 
 jobs:
   build_and_test:
     runs-on: ubuntu-latest
 
     steps:
-    - uses: actions/checkout@v2
+      - uses: actions/checkout@v2
 
-    - name: Set up JDK 14
-      uses: actions/setup-java@v1
-      with:
-        java-version: 14
+      - name: Set up JDK 14
+        uses: actions/setup-java@v1
+        with:
+          java-version: 14
 
-    - name: Build project
-      env:
-        DAY_OF_WEEK: ${{ env.DAY_OF_WEEK }}
-      run: mvn -B package --file pom.xml -DDAY_OF_WEEK=$DAY_OF_WEEK
-
+      - name: Build project
+        env:
+          DAY_OF_WEEK: ${{ github.event.inputs.day_of_week }}  # Use input variable here
+        run: mvn -B package --file pom.xml -DDAY_OF_WEEK=$DAY_OF_WEEK
