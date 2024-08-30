@@ -24,5 +24,7 @@ jobs:
     - name: Print Env variable
       run: echo "Hello Darpan. Today is $DAY_OF_WEEK!"
 
-    - name: Build project with Maven
-      run: mvn -B package --file pom.xml -DDAY_OF_WEEK=$DAY_OF_WEEK
+    - name: Print Environment Variable
+      run: mvn exec:java -Dexec.mainClass=PrintEnv -Dexec.args="$DAY_OF_WEEK"
+      env:
+        DAY_OF_WEEK: ${{ secrets.DAY_OF_WEEK }} # Use GitHub Secrets if you want to keep this secure
