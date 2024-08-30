@@ -25,4 +25,4 @@ jobs:
       run: echo "Hello Darpan. Today is $DAY_OF_WEEK!"
 
     - name: Build project with Maven
-      run: mvn -B package --file pom.xml
+      run: mvn -B package --file pom.xml -DDAY_OF_WEEK=$DAY_OF_WEEK
