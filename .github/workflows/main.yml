@@ -6,11 +6,6 @@ on:
   pull_request:
     branches: [ master ]
   workflow_dispatch:
-    inputs:
-      day_of_week:
-        description: "The day of the week for the build"
-        required: true
-        default: "Monday"
 
 jobs:
   build_and_test:
