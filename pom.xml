@@ -28,13 +28,7 @@
             <goal>java</goal>
           </goals>
           <configuration>
-            <mainClass>PrintEnv</mainClass>
-            <systemProperties>
-              <property>
-                <name>DAY_OF_WEEK</name>
-                <value>${DAY_OF_WEEK}</value>
-              </property>
-            </systemProperties>
+            <mainClass>PrintEnv</mainClass> <!-- Class in default package -->
           </configuration>
         </execution>
       </executions>
