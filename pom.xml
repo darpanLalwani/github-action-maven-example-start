@@ -16,23 +16,6 @@
 
     <build>
         <plugins>
-         <!--<plugin>
-      <groupId>org.codehaus.mojo</groupId>
-      <artifactId>exec-maven-plugin</artifactId>
-      <version>3.0.0</version>
-      <executions>
-        <execution>
-          <id>print-env</id>
-          <phase>validate</phase>
-          <goals>
-            <goal>java</goal>
-          </goals>
-          <configuration>
-            <mainClass>PrintEnv</mainClass> <!-- Class in default package -->
-          </configuration>
-        </execution>
-      </executions>
-    </plugin>-->
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-assembly-plugin</artifactId>
