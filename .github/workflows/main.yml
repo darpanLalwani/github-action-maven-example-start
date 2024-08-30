@@ -1,16 +1,12 @@
 name: Maven CI/CD
 
 on:
-  push:
-    branches: [ master ]
-  pull_request:
-    branches: [ master ]
-  workflow_dispatch:
+  repository_dispatch:
+    types: [run-workflow]
 
 jobs:
   build_and_test:
     runs-on: ubuntu-latest
-
     steps:
       - uses: actions/checkout@v2
 
@@ -20,6 +16,4 @@ jobs:
           java-version: 14
 
       - name: Build project
-        env:
-          DAY_OF_WEEK: ${{ github.event.inputs.day_of_week }}  # Use input variable here
-        run: mvn -B package --file pom.xml -DDAY_OF_WEEK=$DAY_OF_WEEK
+        run: mvn -B package --file pom.xml -DDAY_OF_WEEK=${{ github.event.client_payload.day_of_week }}
