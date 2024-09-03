@@ -2,7 +2,7 @@ name: Maven CI/CD
 
 on:
   repository_dispatch:
-    types: [bstack-rerun]
+    types: [bstack-rerun-feature]
 
 jobs:
   build_and_test:
