@@ -8,6 +8,6 @@ public class PrintEnv {
             dayOfWeek = System.getenv("IS_RERUN"); // Fallback to environment variable
             source = "getenv";
         }
-        System.out.println("Received env variable from " + source + " and IS_RERUN is: " + dayOfWeek);
+        System.out.println("Received env variable in feature branch " + source + " and IS_RERUN is: " + dayOfWeek);
     }
 }
