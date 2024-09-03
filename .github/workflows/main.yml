@@ -2,7 +2,7 @@ name: Maven CI/CD
 
 on:
   repository_dispatch:
-    types: [run-workflow]
+    types: [bstack-rerun]
 
 jobs:
   build_and_test:
@@ -16,4 +16,4 @@ jobs:
           java-version: 14
 
       - name: Build project
-        run: mvn -B package --file pom.xml -DDAY_OF_WEEK=${{ github.event.client_payload.day_of_week }}
+        run: mvn -B package --file pom.xml -DIS_RERUN=${{ github.event.client_payload.is_rerun }}
