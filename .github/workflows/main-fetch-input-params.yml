@@ -21,19 +21,16 @@ jobs:
           sudo apt update
           sudo apt install gh -y
 
-      - name: Authenticate with GitHub CLI
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-        run: gh auth login --with-token
-
       - name: Fetch Workflow Run Data
         id: fetch_run
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run: |
           RUN_ID=${{ github.event.inputs.target_run_id }}
           REPO=${{ github.repository }}
           echo "Fetching data for run ID: $RUN_ID"
           
-          RESPONSE=$(gh api repos/$REPO/actions/runs/$RUN_ID --jq '.')
+          RESPONSE=$(gh api repos/$REPO/actions/runs/$RUN_ID --header "Authorization: token $GITHUB_TOKEN" --jq '.')
           echo "Response: $RESPONSE"
           
           INPUTS=$(echo "$RESPONSE" | jq -r '.event.inputs')
