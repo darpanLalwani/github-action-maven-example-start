@@ -30,9 +30,13 @@ jobs:
           REPO=${{ github.repository }}
           echo "Fetching data for run ID: $RUN_ID"
           
-          RESPONSE=$(gh api repos/$REPO/actions/runs/$RUN_ID --header "Authorization: token $GITHUB_TOKEN" --jq '.')
+          RESPONSE=$(gh api repos/$REPO/actions/runs/$RUN_ID --header "Authorization: token $GITHUB_TOKEN")
           echo "Response: $RESPONSE"
           
+          # Print the entire response to understand its structure
+          echo "$RESPONSE" | jq .
+          
+          # Adjust the jq query based on the actual structure
           INPUTS=$(echo "$RESPONSE" | jq -r '.event.inputs')
           echo "Inputs: $INPUTS"
           
