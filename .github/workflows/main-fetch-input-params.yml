@@ -1,0 +1,31 @@
+name: Fetch Input Parameters from Another Run
+
+on:
+  workflow_dispatch:
+    inputs:
+      target_run_id:
+        description: 'Target Run ID to fetch input parameters from'
+        required: true
+        default: 10632763053
+
+jobs:
+  fetch-inputs:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Set up GitHub CLI
+        uses: actions/gh-cli@v1
+
+      - name: Fetch Workflow Run Data
+        id: fetch_run
+        run: |
+          RUN_ID=${{ github.event.inputs.target_run_id }}
+          REPO=${{ github.repository }}
+          echo "Fetching data for run ID: $RUN_ID"
+          
+          RESPONSE=$(gh api repos/$REPO/actions/runs/$RUN_ID --jq '.')
+          echo "Response: $RESPONSE"
+          
+          INPUTS=$(echo "$RESPONSE" | jq -r '.event.inputs')
+          echo "Inputs: $INPUTS"
+          
+          echo "::set-output name=inputs::$INPUTS"
