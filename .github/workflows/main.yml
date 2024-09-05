@@ -39,5 +39,5 @@ jobs:
 
       - name: 'Run Tests with Updated Parameters'
         run: |
-          # Use the output value from the previous step
-          echo "Running tests: ${{ steps.setup_rerun_vars.outputs.tests_to_run }}"
+            # Use the environment variable from the previous step
+            echo "Running tests: ${{ env.tests_to_run }}"
