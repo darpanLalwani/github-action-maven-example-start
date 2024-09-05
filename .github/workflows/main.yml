@@ -13,6 +13,24 @@ on:
         default: "disabled"
 
 jobs:
+  identify-app-trigger:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Check if Rerun Triggered by GitHub App
+        id: check-app-trigger
+        run: |
+          if [[ "${{ github.actor }}" == "GHA-BSTACK-RERUN[bot]" ]]; then
+            echo "This rerun was triggered by the GitHub App."
+            echo "IS_TRIGGERED_BY_APP=true" >> $GITHUB_ENV
+          else
+            echo "This rerun was triggered by a different actor."
+            echo "IS_TRIGGERED_BY_APP=false" >> $GITHUB_ENV
+
+      - name: Take Action Based on Trigger Source
+        if: env.IS_TRIGGERED_BY_APP == 'true'
+        run: |
+          echo "Performing actions because this was triggered by the GitHub App..."
+
   check-rerun:
     runs-on: ubuntu-latest
     steps:
