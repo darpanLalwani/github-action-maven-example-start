@@ -39,8 +39,7 @@ jobs:
         with:
           run_attempt: "${{ github.run_attempt }}"
           github_context: ${{ env.GITHUB_CONTEXT_JSON }}
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}  # Pass the token as an environment variable
+          github_token: ${{ secrets.GITHUB_TOKEN }}
 
       - name: 'Run Tests with Updated Parameters'
         run: |
