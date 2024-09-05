@@ -25,6 +25,7 @@ jobs:
           else
             echo "This rerun was triggered by a different actor."
             echo "IS_TRIGGERED_BY_APP=false" >> $GITHUB_ENV
+          fi
 
       - name: Take Action Based on Trigger Source
         if: env.IS_TRIGGERED_BY_APP == 'true'
