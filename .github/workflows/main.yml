@@ -29,6 +29,13 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: 'BrowserStack Env Setup for Rerun'
+        id: setup_rerun_vars
         uses: 'browserstack/github-actions/setup-rerun-vars@rerun'
         with:
           run_attempt: "${{ github.run_attempt }}"
+
+      # Use the output from the previous step to overwrite `tests_to_run`
+      - name: 'Run Tests with Updated Parameters'
+        run: |
+            # Use the output value from the previous step
+            echo "Running tests: ${{ steps.setup_rerun_vars.outputs.tests_to_run }}"
