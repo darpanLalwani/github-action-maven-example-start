@@ -28,14 +28,21 @@ jobs:
   call-bstack-action:
     runs-on: ubuntu-latest
     steps:
+      - name: Set up GitHub context as JSON
+        id: set_github_context
+        run: |
+          echo "GITHUB_CONTEXT_JSON=$(echo '{\"repository\": \"${{ github.repository }}\", \"run_id\": \"${{ github.run_id }}\"}' | jq -Rsa .)" >> $GITHUB_ENV
+
       - name: 'BrowserStack Env Setup for Rerun'
         id: setup_rerun_vars
         uses: 'browserstack/github-actions/setup-rerun-vars@rerun'
         with:
           run_attempt: "${{ github.run_attempt }}"
+          github_context: ${{ env.GITHUB_CONTEXT_JSON }}
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}  # Pass the token as an environment variable
 
-      # Use the output from the previous step to overwrite `tests_to_run`
       - name: 'Run Tests with Updated Parameters'
         run: |
-            # Use the output value from the previous step
-            echo "Running tests: ${{ steps.setup_rerun_vars.outputs.tests_to_run }}"
+          # Use the output value from the previous step
+          echo "Running tests: ${{ steps.setup_rerun_vars.outputs.tests_to_run }}"
