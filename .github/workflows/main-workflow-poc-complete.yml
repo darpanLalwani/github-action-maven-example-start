@@ -1,0 +1,67 @@
+name: Workflow Dispatch
+
+on:
+  push:
+    branches: [ master ]
+  pull_request:
+    branches: [ master ]
+  workflow_dispatch:
+    inputs:
+      is_rerun:
+        description: "If re run is enabled or disabled"
+        required: true
+        default: "disabled"
+
+jobs:
+  identify-app-trigger:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Get Run Details
+        id: get_run_details
+        run: |
+          curl -H "Authorization: token ${{ secrets.GITHUB_TOKEN }}" \
+               -H "Accept: application/vnd.github.v3+json" \
+               "https://api.github.com/repos/${{ github.repository }}/actions/runs/${{ github.run_id }}" > run_details.json
+
+      - name: Print Triggering Actor Login
+        run: |
+          triggering_actor=$(jq -r '.triggering_actor.login' run_details.json)
+          echo "Triggering Actor: $triggering_actor"
+
+          if [[ "$triggering_actor" == "gha-bstack-rerun[bot]" ]]; then
+            echo "The run was triggered by the GitHub App."
+          else
+            echo "The run was triggered by: ${{ github.actor }}"
+          fi
+
+      - name: Take Action Based on Trigger Source
+        if: env.IS_TRIGGERED_BY_APP == 'true'
+        run: |
+          echo "Performing actions because this was triggered by the GitHub App..."
+
+  check-rerun:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Check if this is a re-run
+        run: |
+          if [ "${{ github.run_attempt }}" -gt 1 ]; then
+            echo "This run is a re-run (attempt #${{ github.run_attempt }})."
+          else
+            echo "This is the first run."
+          fi
+
+  build_and_test:
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v2
+
+      - name: Set up JDK 14
+        uses: actions/setup-java@v1
+        with:
+          java-version: 14
+
+      - name: Build project
+        env:
+          IS_RERUN: ${{ github.event.inputs.is_rerun }}  # Use input variable here
+        run: mvn -B package --file pom.xml -DIS_RERUN=$IS_RERUN
