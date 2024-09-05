@@ -19,7 +19,7 @@ jobs:
       - name: Check if Rerun Triggered by GitHub App
         id: check-app-trigger
         run: |
-          if [[ "${{ github.actor }}" == "gha-bstack-rerun[bot]" ]]; then
+          if [[ "${{ github.event.workflow_run.triggering_actor.login }}" == "gha-bstack-rerun[bot]" ]]; then
             echo "This rerun was triggered by the GitHub App."
             echo "IS_TRIGGERED_BY_APP=true" >> $GITHUB_ENV
           else
