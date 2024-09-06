@@ -15,14 +15,6 @@ on:
         description: "Another user variable"
         required: false
         default: "456"
-      is_rerun:
-        description: "If re run is enabled or disabled"
-        required: false
-        default: "false"
-      tests_to_run:
-        description: "The tests to be run"
-        required: false
-        default: "all"
 
 jobs:
   call-bstack-action:
@@ -30,14 +22,24 @@ jobs:
     steps:
       - name: 'BrowserStack Env Setup for Rerun'
         id: setup_rerun_vars
+        if: ${{ github.run_attempt > 1 }}  # Only run if it is a re-run
         uses: 'browserstack/github-actions/setup-rerun-vars@rerun'
         with:
-          run_attempt: ${{ github.run_attempt }}
           repository: ${{ github.repository }}
           run_id: ${{ github.run_id }}
           github_token: ${{ secrets.GITHUB_TOKEN }}
 
-      - name: 'Run Tests with Updated Parameters'
+      - name: 'Use of BSTACK Environment Variables if Re-run'
         run: |
-            # Use the environment variable from the previous step
-            echo "Running tests: ${{ env.tests_to_run }}"
+          if [ -n "${{ env.BSTACK_IS_RERUN }}" ]; then
+            echo "Is Rerun: ${{ env.BSTACK_IS_RERUN }}"
+            if [ -n "${{ env.BSTACK_RERUN_TESTS }}" ]; then
+              echo "Running tests: ${{ env.BSTACK_RERUN_TESTS }}"
+            else
+              echo "Browserstack has not overriden BSTACK_RERUN_TESTS variable, please continue with normal flow"
+            fi
+          else
+            echo "Browserstack has not overriden BSTACK_IS_RERUN variable, please continue with normal flow"
+          fi
+          
+      
