@@ -22,7 +22,7 @@ jobs:
     steps:
       - name: Use the Auth Token
         env:
-          AUTH_TOKEN: ${{ secrets.BSTACK_AUTH_TOKEN }}  # Access token from secrets
+          AUTH_TOKEN: ${{ secrets.AUTH_TOKEN }}  # Access token from secrets
         run: |
           echo "Using Auth Token: $AUTH_TOKEN"
           # Use the AUTH_TOKEN as needed in your script or commands
