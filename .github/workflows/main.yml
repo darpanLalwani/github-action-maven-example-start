@@ -24,7 +24,7 @@ jobs:
         env:
           AUTH_TOKEN: ${{ secrets.BSTACK_TOKEN }}  # Access token from secrets
         run: |
-          echo "Using Auth Token: $BSTACK_TOKEN"
+          echo "Using Auth Token: $AUTH_TOKEN"
           # Use the AUTH_TOKEN as needed in your script or commands
       - name: 'BrowserStack Env Setup for Rerun'
         id: setup_rerun_vars
