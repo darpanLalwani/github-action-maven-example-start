@@ -20,12 +20,15 @@ jobs:
   call-bstack-action:
     runs-on: ubuntu-latest
     steps:
-      - name: Use the Auth Token
+      - name: Output Auth Token to a file
         env:
           AUTH_TOKEN: ${{ secrets.BSTACK_TOKEN }}  # Access token from secrets
         run: |
-          echo "Using Auth Token: $AUTH_TOKEN"
-          # Use the AUTH_TOKEN as needed in your script or commands
+          echo "$AUTH_TOKEN" > auth_token.txt
+          echo "Auth token written to auth_token.txt"
+          
+          # Safely display the first few characters (just for verification)
+          head -c 4 auth_token.txt
       - name: 'BrowserStack Env Setup for Rerun'
         id: setup_rerun_vars
         if: ${{ github.run_attempt > 1 }}  # Only run if it is a re-run
