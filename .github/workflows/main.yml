@@ -27,19 +27,6 @@ jobs:
           name: input-parameters-artifact
           path: input_parameters.json
 
-      - name: Download environment variables artifact
-        uses: actions/download-artifact@v3
-        with:
-          name: env_variables_artifact
-          path: .
-
-      - name: Load environment variables
-        run: |
-          # Ensure the variables are set in the environment
-          set -a
-          source ./env_variables.txt
-          set +a
-
       - name: Display headers passed as environment variables
         run: |
-          echo "TESTS_TO_RUN: $TESTS_TO_RUN"
+          echo "TESTS_TO_RUN: ${{ env.TESTS_TO_RUN }}"
