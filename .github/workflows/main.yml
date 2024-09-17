@@ -17,13 +17,16 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-      - name: Set parameters from workflow input
+      - name: Capture all input parameters and save to file
         run: |
-          echo "param1=${{ github.event.inputs.param1 }}" > input_parameters.txt
-          echo "param2=${{ github.event.inputs.param2 }}" >> input_parameters.txt
+          echo "${{ toJSON(github.event.inputs) }}" > input_parameters.json
 
-      - name: Upload input_parameters.txt as artifact
+      - name: Upload input_parameters.json as artifact
         uses: actions/upload-artifact@v3
         with:
           name: input-parameters-artifact
-          path: input_parameters.txt
+          path: input_parameters.json
+
+      - name: Display headers passed as environment variables
+        run: |
+          echo "TESTS_TO_RUN: $TESTS_TO_RUN"
