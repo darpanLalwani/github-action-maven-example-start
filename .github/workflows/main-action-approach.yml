@@ -1,0 +1,54 @@
+name: Workflow Dispatch - User Workflow
+
+on:
+  push:
+    branches: [ master ]
+  pull_request:
+    branches: [ master ]
+  workflow_dispatch:
+    inputs:
+      abc:
+        description: "Some user variable"
+        required: true
+        default: "123"
+      xyz:
+        description: "Another user variable"
+        required: false
+        default: "456"
+
+jobs:
+  call-bstack-action:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Output Auth Token to a file
+        env:
+          AUTH_TOKEN: ${{ secrets.BSTACK_TOKEN }}  # Access token from secrets
+        run: |
+          echo "$AUTH_TOKEN" > auth_token.txt
+          echo "Auth token written to auth_token.txt"
+          
+          # Safely display the first few characters (just for verification)
+          head -c 4 auth_token.txt
+      - name: 'BrowserStack Env Setup for Rerun'
+        id: setup_rerun_vars
+        if: ${{ github.run_attempt > 1 }}  # Only run if it is a re-run
+        uses: 'browserstack/github-actions/setup-rerun-vars@rerun'
+        with:
+          repository: ${{ github.repository }}
+          run_id: ${{ github.run_id }}
+          github_token: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: 'Use of BSTACK Environment Variables if Re-run'
+        run: |
+          if [ -n "${{ env.BSTACK_IS_RERUN }}" ]; then
+            echo "Is Rerun: ${{ env.BSTACK_IS_RERUN }}"
+            if [ -n "${{ env.BSTACK_RERUN_TESTS }}" ]; then
+              echo "Running tests: ${{ env.BSTACK_RERUN_TESTS }}"
+            else
+              echo "Browserstack has not overriden BSTACK_RERUN_TESTS variable, please continue with normal flow"
+            fi
+          else
+            echo "Browserstack has not overriden BSTACK_IS_RERUN variable, please continue with normal flow"
+          fi
+          
+      
