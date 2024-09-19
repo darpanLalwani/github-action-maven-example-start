@@ -1,32 +1,34 @@
-name: Save Input Parameters as Artifact
+name: Workflow Dispatch - Final Approach
 
 on:
+  push:
+    branches: [ master ]
+  pull_request:
+    branches: [ master ]
   workflow_dispatch:
     inputs:
-      param1:
-        description: "First input parameter"
+      abc:
+        description: "Some user variable"
         required: true
-        default: "default1"
-      param2:
-        description: "Second input parameter"
-        required: true
-        default: "default2"
+        default: "123"
+      xyz:
+        description: "Another user variable"
+        required: false
+        default: "456"
 
 jobs:
-  create-artifact:
+  call-bstack-action:
     runs-on: ubuntu-latest
-
     steps:
-      - name: Capture all input parameters and save to file
-        run: |
-          echo "${{ toJSON(github.event.inputs) }}" > input_parameters.json
-
-      - name: Upload input_parameters.json as artifact
-        uses: actions/upload-artifact@v3
+      - name: 'BrowserStack Env Setup for Rerun'
+        id: setup_rerun_vars
+        uses: 'browserstack/github-actions/setup-rerun-vars@rerun'
         with:
-          name: input-parameters-artifact
-          path: input_parameters.json
+          username: ${{ secrets.BROWSERSTACK_USERNAME }}
+          access-key: ${{ secrets.BROWSERSTACK_ACCESS_KEY }}
+          rerun-attempt: ${{ github.run_attempt }}
+          repository: ${{ github.repository }}
+          run-id: ${{ github.run_id }}
+          github-token: ${{ secrets.GITHUB_TOKEN }}
+          github-app: 'gha-bstack-rerun[bot]'
 
-      - name: Display headers passed as environment variables
-        run: |
-          echo "TESTS_TO_RUN: ${{ env.TESTS_TO_RUN }}"
