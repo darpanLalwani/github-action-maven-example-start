@@ -26,9 +26,6 @@ jobs:
         with:
           username: ${{ secrets.BROWSERSTACK_USERNAME }}
           access-key: ${{ secrets.BROWSERSTACK_ACCESS_KEY }}
-          rerun-attempt: ${{ github.run_attempt }}
-          repository: ${{ github.repository }}
-          run-id: ${{ github.run_id }}
           github-token: ${{ secrets.GITHUB_TOKEN }}
           github-app: 'gha-bstack-rerun[bot]'
 
