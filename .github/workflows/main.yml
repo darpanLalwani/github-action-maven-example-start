@@ -29,3 +29,7 @@ jobs:
           github-token: ${{ secrets.GITHUB_TOKEN }}
           github-app: 'gha-bstack-rerun[bot]'
 
+      - name: 'Use of BSTACK Environment Variables if Re-run'
+        run: |
+            echo "Env variable is: ${{ env.actor }}"
+
