@@ -22,7 +22,7 @@ jobs:
     steps:
       - name: 'BrowserStack Env Setup for Rerun'
         id: setup_rerun_vars
-        uses: 'browserstack/github-actions/setup-rerun-vars@rerun'
+        uses: 'browserstack/github-actions/setup-env@rerun'
         with:
           username: ${{ secrets.BROWSERSTACK_USERNAME }}
           access-key: ${{ secrets.BROWSERSTACK_ACCESS_KEY }}
