@@ -27,6 +27,7 @@ jobs:
           username: ${{ secrets.BROWSERSTACK_USERNAME }}
           access-key: ${{ secrets.BROWSERSTACK_ACCESS_KEY }}
           github-app: 'bstack-integrations[bot]'
+          github-token: ${{ secrets.GITHUB_TOKEN }}
 
       - name: 'Use of BSTACK Environment Variables if Re-run'
         run: |
